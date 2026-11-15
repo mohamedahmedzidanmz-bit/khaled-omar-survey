@@ -103,9 +103,17 @@ th{color:var(--muted);font-weight:500}
       <button class="btn ghost" id="refresh">تحديث</button>
       <button class="btn ghost" id="csv">تنزيل Excel (CSV)</button>
       <button class="btn ghost" id="chpw">تغيير الباسورد</button>
+      <button class="btn ghost" id="delall" style="border-color:var(--bad,#b3261e);color:var(--bad,#b3261e)">حذف كل النتائج</button>
       <button class="btn ghost" id="out">خروج</button>
     </div>
     <span class="msg" id="rmsg" role="status"></span>
+    <div class="card" id="delbox" hidden style="border-color:#b3261e">
+      <strong>هتمسح كل الإجابات (<span id="delcount">0</span> إجابة) ومش هينفع ترجعها.</strong>
+      <p class="note">لو عايز تحتفظ بنسخة، دوس «تنزيل Excel (CSV)» الأول. للتأكيد اكتب كلمة <b>حذف</b> ودوس «امسح نهائيًا».</p>
+      <div class="bar"><input id="delconfirm" aria-label="اكتب حذف للتأكيد" placeholder="اكتب: حذف">
+        <button class="btn" id="delgo" style="background:#b3261e;border-color:#b3261e" disabled>امسح نهائيًا</button>
+        <button class="btn ghost" id="delcancel">إلغاء</button></div>
+    </div>
 
     <div class="kpis" id="kpis"></div>
 
@@ -331,6 +339,14 @@ $("#refresh").addEventListener("click",refresh);
 $("#csv").addEventListener("click",csv);
 $("#chpw").addEventListener("click",changePw);
 $("#out").addEventListener("click",logout);
+$("#delall").addEventListener("click",()=>{ $("#delcount").textContent=ROWS.length; $("#delconfirm").value=""; $("#delgo").disabled=true; $("#delbox").hidden=false; $("#delconfirm").focus(); });
+$("#delcancel").addEventListener("click",()=>{ $("#delbox").hidden=true; });
+$("#delconfirm").addEventListener("input",()=>{ $("#delgo").disabled = $("#delconfirm").value.trim()!=="حذف"; });
+$("#delgo").addEventListener("click",async()=>{
+  $("#delgo").disabled=true;
+  try{ const n=await rpc("survey_delete_all",{p_password:PW}); ROWS=[]; $("#delbox").hidden=true; render(); setR("اتمسح "+(n||0)+" إجابة. الاستبيان جاهز للردود الحقيقية.","ok"); }
+  catch(e){ if(e.status===403) logout(); else { setR("المسح ما نجحش: "+e.message,"bad"); $("#delgo").disabled=false; } }
+});
 
 (async()=>{
   let saved=null; try{ saved=sessionStorage.getItem(KEY); }catch(e){}
