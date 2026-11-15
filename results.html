@@ -95,6 +95,7 @@ th{color:var(--muted);font-weight:500}
         <button class="tab" role="tab" data-v="items" aria-selected="true">حسب الصنف</button>
         <button class="tab" role="tab" data-v="branches" aria-selected="false">حسب الفرع</button>
         <button class="tab" role="tab" data-v="ideas" aria-selected="false">الاقتراحات</button>
+        <button class="tab" role="tab" data-v="manage" aria-selected="false">إخفاء / إظهار أصناف</button>
       </div>
       <span class="sp"></span>
       <label for="fbranch" style="flex-direction:row;align-items:center;gap:6px">الفرع
@@ -111,18 +112,21 @@ th{color:var(--muted);font-weight:500}
     <div id="v-items" style="display:flex;flex-direction:column;gap:12px"></div>
     <div id="v-branches" hidden></div>
     <div id="v-ideas" hidden></div>
+    <div id="v-manage" hidden></div>
   </section>
 </div>
 
 <script>
 const SB_URL="https://octnxrqluyhgtwhuhcyy.supabase.co", SB_KEY="sb_publishable_D3HLuUtmQkjH3rfkJMZMHg_eUhjNjgQ";
-const ITEMS=[[1085,"تورتة 23 سنيكرز","الغربي",-81],[1092,"تورتة 27 فورسيزون","الغربي",-80],[644,"جاتوه فورم","الغربي",-55],[1327,"هريسة توب بندق","الشرقي",-99],[889,"تورتة 30*30 فورسيزون","الغربي",-29],[541,"كيك لاتينو","الشرقي",-99],[769,"بغاشة مكسرات","الشرقي",-53],[1453,"كوب بريفيترول","الشرقي",-80],[686,"تورتة مقاس 27","الغربي",-16],[683,"تورتة قلب وسط","الغربي",-16],[655,"سابليه مكسرات سايب","البكري",-33],[618,"بلح الشام","الشرقي",-30],[736,"مدلعة","الشرقي",-25],[640,"ميني كرواسون","البكري",-32],[602,"هريسة مكسرات","الشرقي",-25],[1353,"فادج لوتس","الغربي",-56],[1228,"كنافة مانجو","الشرقي",-25],[664,"معمول ملبن","البكري",-72],[1229,"مشبك سواريه","الشرقي",-99],[711,"كنافة كونو","الشرقي",-63],[763,"اسكتو","البكري",-30],[782,"تارت 27","الغربي",-86]].map(([c,n,s,qg])=>({c,n,s,qg}));
+const ITEMS=[[782,"تارت 27","الغربي",-86],[1085,"تورتة 23 سنيكرز","الغربي",-81],[1092,"تورتة 27 فورسيزون","الغربي",-80],[874,"تشيز كيك","الغربي",-73],[1353,"فادج لوتس","الغربي",-56],[644,"جاتوه فورم","الغربي",-55],[889,"تورتة 30*30 فورسيزون","الغربي",-29],[645,"بولا","الغربي",-23],[683,"تورتة قلب وسط","الغربي",-16],[686,"تورتة مقاس 27","الغربي",-16],[1514,"بلس","الغربي",-3],[694,"تورتة مقاس 60*80","الغربي",-2],[1229,"مشبك سواريه","الشرقي",-99],[541,"كيك لاتينو","الشرقي",-99],[1327,"هريسة توب بندق","الشرقي",-99],[1453,"كوب بريفيترول","الشرقي",-80],[711,"كنافة كونو","الشرقي",-63],[533,"كنافه مكسرات \" بصمه \"","الشرقي",-59],[1525,"كنافة بروفترول","الشرقي",-55],[769,"بغاشة مكسرات","الشرقي",-53],[894,"كنافة ديلايت","الشرقي",-34],[1375,"هريسه رول كريمه","الشرقي",-30],[618,"بلح الشام","الشرقي",-30],[612,"كنافة عثمانلي","الشرقي",-29],[602,"هريسة مكسرات","الشرقي",-25],[736,"مدلعة","الشرقي",-25],[1228,"كنافة مانجو","الشرقي",-25],[784,"كنافة نيوتيلا","الشرقي",-25],[606,"بسيمة لوز","الشرقي",-24],[678,"حجازية مكسرات","الشرقي",-23],[615,"شهد","الشرقي",-19],[610,"فطير كاستر","الشرقي",-18],[609,"كنافة كاستر","الشرقي",-16],[1030,"كنافة بصمة","الشرقي",-12],[611,"كنافة فواكه","الشرقي",-12],[727,"لديدة","الشرقي",-12],[625,"كنافة عش","الشرقي",-11],[627,"رموش الست","الشرقي",-10],[529,"كنافه فانتازيا","الشرقي",-10],[623,"كنافة مخشوشة سوداني","الشرقي",-8],[629,"بقلاوة سوارية","الشرقي",-7],[628,"حبيبة","الشرقي",-7],[619,"رواني شيكولاتة","الشرقي",-5],[604,"بسبوسة لوز","الشرقي",-2],[608,"هريسة محشية","الشرقي",-1],[617,"عزيزة","الشرقي",-1],[664,"معمول ملبن","البكري",-72],[635,"دنش","البكري",-58],[663,"معمول عجوة","البكري",-47],[655,"سابليه مكسرات سايب","البكري",-33],[640,"ميني كرواسون","البكري",-32],[633,"باتيه جبنة","البكري",-32],[763,"اسكتو","البكري",-30],[803,"كعك ملبن بلدي سايب","البكري",-30],[788,"اكلير فواكه/نوتيلا","البكري",-27],[802,"باتيه لوكس","البكري",-26],[1007,"قرص عجوة سايب","البكري",-26],[636,"بيتزا لوكس","البكري",-25],[660,"اكلير شيكولاتة","البكري",-22],[697,"كريسينا سادة","البكري",-19],[675,"انجلش كيك","البكري",-19],[777,"بسكويت سوداني","البكري",-18],[1131,"ميني اكلير فواكه","البكري",-14],[1003,"قراقيش سايب","البكري",-14],[658,"تارت شيكولاتة","البكري",-10],[656,"سابليه تارت سواريه","البكري",-5],[667,"بتي فور مكسرات سايب","البكري",-3],[696,"كريسينا سمسم","البكري",-2],[775,"مولتن كيك","البكري",-2]].map(([c,n,s,qg])=>({c,n,s,qg}));
 const BRANCHES=["ابيس","البيطاش","الساحل","الصلب","العامرية","العامرية الجديد","العطارين","العوايد","العيسوي","المطار","المندرة","النهضة","الهانوفيل","الورديان","الوطنية","برج العرب","راغب","سموحة","عبد القادر","فرع 45","ك 21","محرم بك","مصطفي كامل","ميكس"];
 const REASONS=[["price","السعر غالي على الزبون"],["quality","الطعم أو الجودة اتغيرت"],["supply","التوريد قليل أو الصنف بيخلص بدري"],["look","الشكل أو التغليف"],["subst","الزبون بيشتري صنف بديل عندنا"],["comp","المنافسين أرخص أو أحسن"],["display","مش ظاهر كويس في الفاترينة"],["season","الطلب عليه قل (موسم / ذوق)"],["other","سبب تاني"]];
 const RL=Object.fromEntries(REASONS);
 const $=s=>document.querySelector(s);
 const KEY="ko-results-pw";
 let PW=null, ROWS=[], view="items", setupMode=false;
+let HIDDEN=new Set(), DRAFT_HIDDEN=null;
+async function loadHidden(){ try{ const r=await fetch(SB_URL+"/rest/v1/survey_hidden_items?select=code&survey=eq.oct2026_declines",{headers:{apikey:SB_KEY},cache:"no-store"}); if(r.ok){ HIDDEN=new Set((await r.json()).map(x=>x.code)); } }catch(e){} DRAFT_HIDDEN=null; }
 
 function el(tag,cls,txt){ const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
 function pct(v){ return (v>=0?"+":"−")+Math.abs(v)+"%"; }
@@ -156,7 +160,7 @@ async function enter(){
   $("#go").disabled=true; m.textContent="ثانية…"; m.className="msg";
   try{
     if(setupMode) await rpc("survey_set_password",{p_new:p});
-    ROWS=await rpc("survey_results",{p_password:p}) || [];
+    ROWS=await rpc("survey_results",{p_password:p}) || []; await loadHidden();
     PW=p; try{ sessionStorage.setItem(KEY,p); }catch(e){}
     $("#pw").value=""; $("#pw2").value="";
     showResults();
@@ -178,6 +182,46 @@ function showResults(){
   BRANCHES.forEach(b=>fb.append(new Option(b,b))); fb.value=cur;
   render();
 }
+function renderManage(){
+  const box=$("#v-manage"); box.replaceChildren();
+  if(!DRAFT_HIDDEN) DRAFT_HIDDEN=new Set(HIDDEN);
+  const intro=el("div","card");
+  intro.append(el("strong",null,"الأصناف اللي تشيل علامتها مش هتظهر للفروع في الاستبيان."));
+  intro.append(el("p","note","الإجابات اللي اتبعتت قبل كده على الصنف المخفي بتفضل محفوظة. اضغط «حفظ» بعد ما تخلص."));
+  const cnt=el("p","note"); const shown=ITEMS.filter(i=>!DRAFT_HIDDEN.has(i.c)).length;
+  cnt.textContent="ظاهر للفروع: "+shown+" من "+ITEMS.length+" صنف"+(DRAFT_HIDDEN.size?(" · مخفي: "+DRAFT_HIDDEN.size):"");
+  intro.append(cnt);
+  const changed = DRAFT_HIDDEN.size!==HIDDEN.size || [...DRAFT_HIDDEN].some(c=>!HIDDEN.has(c));
+  const save=el("button","btn","حفظ"); save.disabled=!changed;
+  const undo=el("button","btn ghost","إلغاء التعديلات"); undo.disabled=!changed;
+  const msg=el("span","msg"); msg.setAttribute("role","status");
+  save.addEventListener("click",async()=>{ save.disabled=true; msg.textContent="جاري الحفظ…"; msg.className="msg";
+    try{ await rpc("survey_set_hidden",{p_password:PW,p_codes:[...DRAFT_HIDDEN]}); HIDDEN=new Set(DRAFT_HIDDEN); renderManage(); setR("اتحفظ. الاستبيان دلوقتي بيعرض "+ITEMS.filter(i=>!HIDDEN.has(i.c)).length+" صنف.","ok"); }
+    catch(e){ if(e.status===403) logout(); else { msg.textContent="ما اتحفظش: "+e.message; msg.className="msg bad"; save.disabled=false; } } });
+  undo.addEventListener("click",()=>{ DRAFT_HIDDEN=new Set(HIDDEN); renderManage(); });
+  const row=el("div","bar"); row.append(save,undo,msg); intro.append(row);
+  box.append(intro);
+  ["الغربي","الشرقي","البكري"].forEach(sec=>{
+    const list=ITEMS.filter(i=>i.s===sec); if(!list.length) return;
+    const card=el("div","card");
+    const head=el("div","bar"); head.append(el("strong",null,sec+" ("+list.filter(i=>!DRAFT_HIDDEN.has(i.c)).length+" / "+list.length+" ظاهر)"));
+    const sp=el("span","sp"); const all=el("button","btn ghost","إظهار الكل"); const none=el("button","btn ghost","إخفاء الكل");
+    all.addEventListener("click",()=>{ list.forEach(i=>DRAFT_HIDDEN.delete(i.c)); renderManage(); });
+    none.addEventListener("click",()=>{ list.forEach(i=>DRAFT_HIDDEN.add(i.c)); renderManage(); });
+    head.append(sp,all,none); card.append(head);
+    const grid=el("div"); grid.style.cssText="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px;margin-top:10px";
+    list.forEach(i=>{
+      const lab=document.createElement("label"); lab.style.cssText="flex-direction:row;align-items:center;gap:8px;color:var(--ink);padding:6px 8px;border:1px solid var(--line);border-radius:8px;cursor:pointer";
+      const cb=document.createElement("input"); cb.type="checkbox"; cb.id="vis-"+i.c; cb.checked=!DRAFT_HIDDEN.has(i.c);
+      cb.addEventListener("change",()=>{ if(cb.checked) DRAFT_HIDDEN.delete(i.c); else DRAFT_HIDDEN.add(i.c); renderManage(); });
+      const name=el("span",null,i.n); if(!cb.checked){ name.style.textDecoration="line-through"; name.style.color="var(--muted)"; }
+      lab.append(cb,name,el("span","note",pct(i.qg)));
+      grid.append(lab);
+    });
+    card.append(grid); box.append(card);
+  });
+}
+
 function render(){
   const rows=filtered();
   // KPIs
@@ -186,8 +230,9 @@ function render(){
   const answeredItems=rows.reduce((s,r)=>s+Object.keys(r.items||{}).length,0);
   [[rows.length,"إجابة"+($("#fbranch").value?" من الفرع ده":"")],[brSet.size+" / "+BRANCHES.length,"فروع جاوبت"],[answeredItems,"صنف اتجاوب عليه (إجمالي)"],[rows.filter(r=>r.general).length,"اقتراح عام"]]
     .forEach(([v,l])=>{ const c=el("div","card kpi"); c.append(el("div","v",String(v)),el("div","l",l)); k.append(c); });
-  ["items","branches","ideas"].forEach(v=>$("#v-"+v).hidden= v!==view);
-  if(view==="items") renderItems(rows); else if(view==="branches") renderBranches(); else renderIdeas(rows);
+  ["items","branches","ideas","manage"].forEach(v=>$("#v-"+v).hidden= v!==view);
+  $("#kpis").hidden = view==="manage";
+  if(view==="items") renderItems(rows); else if(view==="branches") renderBranches(); else if(view==="manage") renderManage(); else renderIdeas(rows);
 }
 
 function renderItems(rows){
@@ -252,7 +297,7 @@ function setR(t,k){ const m=$("#rmsg"); m.textContent=t; m.className="msg "+(k||
 
 async function refresh(){
   setR("بحدّث…");
-  try{ ROWS=await rpc("survey_results",{p_password:PW})||[]; render(); setR("اتحدّث. "+ROWS.length+" إجابة.","ok"); }
+  try{ ROWS=await rpc("survey_results",{p_password:PW})||[]; await loadHidden(); render(); setR("اتحدّث. "+ROWS.length+" إجابة.","ok"); }
   catch(e){ if(e.status===403){ logout(); } else setR("التحديث ما نجحش: "+e.message,"bad"); }
 }
 
@@ -289,7 +334,7 @@ $("#out").addEventListener("click",logout);
 
 (async()=>{
   let saved=null; try{ saved=sessionStorage.getItem(KEY); }catch(e){}
-  if(saved){ try{ ROWS=await rpc("survey_results",{p_password:saved})||[]; PW=saved; showResults(); return; }catch(e){ try{ sessionStorage.removeItem(KEY); }catch(_){} } }
+  if(saved){ try{ ROWS=await rpc("survey_results",{p_password:saved})||[]; PW=saved; await loadHidden(); showResults(); return; }catch(e){ try{ sessionStorage.removeItem(KEY); }catch(_){} } }
   showGate();
 })();
 </script>
