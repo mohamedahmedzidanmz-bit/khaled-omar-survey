@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>نتائج استبيان الفروع</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;700&family=Lalezar&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f4f2; --panel:#ffffff; --ink:#2a1a1c; --muted:#7a6a6c; --line:#e7dfdc;
+  --accent:#7a1f2b; --accent-soft:#f3e5e7; --gold:#b8892a; --gold-soft:#f6eedb;
+  --ok:#2e7d4f; --bad:#b3261e;
+  --display:"Lalezar","Readex Pro",Tahoma,sans-serif; --body:"Readex Pro",Tahoma,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1a1214; --panel:#241a1c; --ink:#f2e9ea; --muted:#b39fa2; --line:#3a2b2e;
+  --accent:#e08a96; --accent-soft:#3a2328; --gold:#e0b65a; --gold-soft:#3a3020; --ok:#6fcf97; --bad:#ff8a80; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#1a1214; --panel:#241a1c; --ink:#f2e9ea; --muted:#b39fa2; --line:#3a2b2e;
+  --accent:#e08a96; --accent-soft:#3a2328; --gold:#e0b65a; --gold-soft:#3a3020; --ok:#6fcf97; --bad:#ff8a80; color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 60px;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:400;font-size:30px;margin:0;color:var(--accent)}
+h2{font-size:18px;margin:0 0 10px}
+.lead{margin:4px 0 0;color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+input,select{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.btn{font:inherit;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:10px;padding:9px 18px;cursor:pointer;font-weight:500}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.sm{padding:3px 10px;font-size:12px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.msg{font-size:13px;min-height:1.2em}
+.msg.bad{color:var(--bad)} .msg.ok{color:var(--ok)}
+.gate{max-width:380px;margin:40px auto 0;display:flex;flex-direction:column;gap:12px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bar .sp{flex:1}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi .v{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:13px;color:var(--muted)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;padding:7px 14px;border-radius:10px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.item{display:flex;flex-direction:column;gap:8px}
+.item h3{margin:0;font-size:16px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.note{font-size:12px;color:var(--muted)}
+.rrow{display:grid;grid-template-columns:minmax(150px,230px) 1fr 44px;gap:8px;align-items:center;font-size:13px}
+.track{height:10px;background:var(--gold-soft);border-radius:5px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--accent);border-radius:5px}
+.track i.ok{background:var(--ok)}
+.num{font-variant-numeric:tabular-nums;text-align:left}
+details{font-size:13px}
+details summary{cursor:pointer;color:var(--muted)}
+details ul{margin:6px 0 0;padding-inline-start:18px}
+details li{margin-bottom:3px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.scroll{overflow-x:auto}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.chip.ok{background:transparent;border:1px solid var(--ok);color:var(--ok)}
+.empty{color:var(--muted);text-align:center;padding:24px}
+[hidden]{display:none!important}
+@media (max-width:560px){.rrow{grid-template-columns:1fr 40px}.rrow .track{grid-column:1/-1;order:3}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>نتائج استبيان أسباب انخفاض الأصناف</h1>
+    <p class="lead">أكتوبر 2026 مقارنة بأكتوبر 2025. الصفحة دي للإدارة بس.</p>
+  </header>
+
+  <!-- Gate -->
+  <section id="gate" class="card gate" hidden>
+    <h2 id="gate-t">ادخل الباسورد</h2>
+    <p class="note" id="gate-n"></p>
+    <label for="pw">الباسورد<input id="pw" type="password" autocomplete="current-password"></label>
+    <label for="pw2" id="pw2-l" hidden>اكتبه تاني للتأكيد<input id="pw2" type="password" autocomplete="new-password"></label>
+    <button class="btn" id="go">دخول</button>
+    <span class="msg" id="gmsg" role="status"></span>
+  </section>
+
+  <!-- Results -->
+  <section id="res" hidden style="display:flex;flex-direction:column;gap:16px">
+    <div class="bar">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" data-v="items" aria-selected="true">حسب الصنف</button>
+        <button class="tab" role="tab" data-v="branches" aria-selected="false">حسب الفرع</button>
+        <button class="tab" role="tab" data-v="ideas" aria-selected="false">الاقتراحات</button>
+      </div>
+      <span class="sp"></span>
+      <label for="fbranch" style="flex-direction:row;align-items:center;gap:6px">الفرع
+        <select id="fbranch"><option value="">كل الفروع</option></select></label>
+      <button class="btn ghost" id="refresh">تحديث</button>
+      <button class="btn ghost" id="csv">تنزيل Excel (CSV)</button>
+      <button class="btn ghost" id="chpw">تغيير الباسورد</button>
+      <button class="btn ghost" id="out">خروج</button>
+    </div>
+    <span class="msg" id="rmsg" role="status"></span>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div id="v-items" style="display:flex;flex-direction:column;gap:12px"></div>
+    <div id="v-branches" hidden></div>
+    <div id="v-ideas" hidden></div>
+  </section>
+</div>
+
+<script>
+const SB_URL="https://octnxrqluyhgtwhuhcyy.supabase.co", SB_KEY="sb_publishable_D3HLuUtmQkjH3rfkJMZMHg_eUhjNjgQ";
+const ITEMS=[[1085,"تورتة 23 سنيكرز","الغربي",-81],[1092,"تورتة 27 فورسيزون","الغربي",-80],[644,"جاتوه فورم","الغربي",-55],[1327,"هريسة توب بندق","الشرقي",-99],[889,"تورتة 30*30 فورسيزون","الغربي",-29],[541,"كيك لاتينو","الشرقي",-99],[769,"بغاشة مكسرات","الشرقي",-53],[1453,"كوب بريفيترول","الشرقي",-80],[686,"تورتة مقاس 27","الغربي",-16],[683,"تورتة قلب وسط","الغربي",-16],[655,"سابليه مكسرات سايب","البكري",-33],[618,"بلح الشام","الشرقي",-30],[736,"مدلعة","الشرقي",-25],[640,"ميني كرواسون","البكري",-32],[602,"هريسة مكسرات","الشرقي",-25],[1353,"فادج لوتس","الغربي",-56],[1228,"كنافة مانجو","الشرقي",-25],[664,"معمول ملبن","البكري",-72],[1229,"مشبك سواريه","الشرقي",-99],[711,"كنافة كونو","الشرقي",-63],[763,"اسكتو","البكري",-30],[782,"تارت 27","الغربي",-86]].map(([c,n,s,qg])=>({c,n,s,qg}));
+const BRANCHES=["ابيس","البيطاش","الساحل","الصلب","العامرية","العامرية الجديد","العطارين","العوايد","العيسوي","المطار","المندرة","النهضة","الهانوفيل","الورديان","الوطنية","برج العرب","راغب","سموحة","عبد القادر","فرع 45","ك 21","محرم بك","مصطفي كامل","ميكس"];
+const REASONS=[["price","السعر غالي على الزبون"],["quality","الطعم أو الجودة اتغيرت"],["supply","التوريد قليل أو الصنف بيخلص بدري"],["look","الشكل أو التغليف"],["subst","الزبون بيشتري صنف بديل عندنا"],["comp","المنافسين أرخص أو أحسن"],["display","مش ظاهر كويس في الفاترينة"],["season","الطلب عليه قل (موسم / ذوق)"],["other","سبب تاني"]];
+const RL=Object.fromEntries(REASONS);
+const $=s=>document.querySelector(s);
+const KEY="ko-results-pw";
+let PW=null, ROWS=[], view="items", setupMode=false;
+
+function el(tag,cls,txt){ const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
+function pct(v){ return (v>=0?"+":"−")+Math.abs(v)+"%"; }
+function fmtDate(s){ try{ return new Date(s).toLocaleString("ar-EG",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }catch(e){ return s; } }
+
+async function rpc(fn, body){
+  const r=await fetch(SB_URL+"/rest/v1/rpc/"+fn,{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(body||{})});
+  if(!r.ok){ let m=""; try{ m=(await r.json()).message||""; }catch(e){} const err=new Error(m||String(r.status)); err.status=r.status; throw err; }
+  const t=await r.text(); return t?JSON.parse(t):null;
+}
+
+/* ---------- gate ---------- */
+async function showGate(){
+  $("#res").hidden=true; $("#gate").hidden=false; $("#gmsg").textContent="";
+  let isSet=true;
+  try{ isSet=await rpc("survey_password_is_set"); }catch(e){ $("#gmsg").textContent="مش قادر أوصل للسيرفر. اتأكد من النت وجرب تاني."; $("#gmsg").className="msg bad"; }
+  setupMode=!isSet;
+  $("#gate-t").textContent= setupMode ? "اختار باسورد للصفحة" : "ادخل الباسورد";
+  $("#gate-n").textContent= setupMode ? "أول مرة تفتح الصفحة. اختار باسورد (6 حروف أو أكتر) واحفظه عندك، هتحتاجه كل مرة." : "";
+  $("#pw2-l").hidden=!setupMode;
+  $("#go").textContent= setupMode ? "حفظ الباسورد والدخول" : "دخول";
+  $("#pw").autocomplete= setupMode ? "new-password" : "current-password";
+  $("#pw").focus();
+}
+async function enter(){
+  const p=$("#pw").value; const m=$("#gmsg");
+  if(setupMode){
+    if(p.length<6){ m.textContent="الباسورد لازم يبقى 6 حروف على الأقل."; m.className="msg bad"; return; }
+    if(p!==$("#pw2").value){ m.textContent="الباسوردين مش زي بعض."; m.className="msg bad"; return; }
+  }
+  $("#go").disabled=true; m.textContent="ثانية…"; m.className="msg";
+  try{
+    if(setupMode) await rpc("survey_set_password",{p_new:p});
+    ROWS=await rpc("survey_results",{p_password:p}) || [];
+    PW=p; try{ sessionStorage.setItem(KEY,p); }catch(e){}
+    $("#pw").value=""; $("#pw2").value="";
+    showResults();
+  }catch(e){
+    m.textContent= e.status===403||/wrong/.test(e.message) ? "الباسورد غلط." : "حصلت مشكلة: "+e.message; m.className="msg bad";
+  }
+  $("#go").disabled=false;
+}
+$("#go").addEventListener("click",enter);
+$("#pw").addEventListener("keydown",e=>{ if(e.key==="Enter"&&!setupMode) enter(); });
+$("#pw2").addEventListener("keydown",e=>{ if(e.key==="Enter") enter(); });
+
+/* ---------- results ---------- */
+function filtered(){ const b=$("#fbranch").value; return b ? ROWS.filter(r=>r.branch===b) : ROWS; }
+
+function showResults(){
+  $("#gate").hidden=true; $("#res").hidden=false;
+  const fb=$("#fbranch"), cur=fb.value; fb.replaceChildren(new Option("كل الفروع",""));
+  BRANCHES.forEach(b=>fb.append(new Option(b,b))); fb.value=cur;
+  render();
+}
+function render(){
+  const rows=filtered();
+  // KPIs
+  const k=$("#kpis"); k.replaceChildren();
+  const brSet=new Set(ROWS.map(r=>r.branch));
+  const answeredItems=rows.reduce((s,r)=>s+Object.keys(r.items||{}).length,0);
+  [[rows.length,"إجابة"+($("#fbranch").value?" من الفرع ده":"")],[brSet.size+" / "+BRANCHES.length,"فروع جاوبت"],[answeredItems,"صنف اتجاوب عليه (إجمالي)"],[rows.filter(r=>r.general).length,"اقتراح عام"]]
+    .forEach(([v,l])=>{ const c=el("div","card kpi"); c.append(el("div","v",String(v)),el("div","l",l)); k.append(c); });
+  ["items","branches","ideas"].forEach(v=>$("#v-"+v).hidden= v!==view);
+  if(view==="items") renderItems(rows); else if(view==="branches") renderBranches(); else renderIdeas(rows);
+}
+
+function renderItems(rows){
+  const box=$("#v-items"); box.replaceChildren();
+  if(!rows.length){ box.append(el("div","card empty","مفيش إجابات لسه.")); return; }
+  const stats=ITEMS.map(it=>{
+    const counts=Object.fromEntries(REASONS.map(([k])=>[k,0])); let no=0, n=0; const notes=[], others=[], subs=[];
+    rows.forEach(r=>{ const a=(r.items||{})[it.c]; if(!a) return;
+      if(a.no){ no++; n++; } else if(a.r&&a.r.length){ n++; a.r.forEach(k=>{ if(k in counts) counts[k]++; }); }
+      if(a.note) notes.push([r.branch,a.note]); if(a.other) others.push([r.branch,a.other]); if(a.sub) subs.push([r.branch,a.sub]);
+    });
+    return {it,counts,no,n,notes,others,subs};
+  }).sort((a,b)=>b.n-a.n);
+  stats.forEach(s=>{
+    const card=el("article","card item");
+    const h=el("h3"); h.append(el("span",null,s.it.n), el("span","note",s.it.s+" · الشركة "+pct(s.it.qg)+" · "+s.n+" فرع جاوب")); card.append(h);
+    if(!s.n){ card.append(el("div","note","محدش جاوب على الصنف ده لسه.")); box.append(card); return; }
+    const max=Math.max(1,s.n);
+    const lines=REASONS.map(([k,l])=>[l,s.counts[k],false]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);
+    if(s.no) lines.push(["الصنف مش نازل عندنا",s.no,true]);
+    lines.forEach(([l,c,ok])=>{ const row=el("div","rrow"); const t=el("div","track"); const i=el("i",ok?"ok":null); i.style.width=(c/max*100)+"%"; t.append(i);
+      row.append(el("span",null,l), t, el("span","num",c+"")); card.append(row); });
+    const extra=[["أسباب تانية",s.others],["الصنف البديل اللي الزبون بياخده",s.subs],["ملاحظات",s.notes]].filter(x=>x[1].length);
+    extra.forEach(([t,list])=>{ const d=el("details"); d.append(el("summary",null,t+" ("+list.length+")")); const ul=el("ul"); list.forEach(([b,v])=>ul.append(el("li",null,b+": "+v))); d.append(ul); card.append(d); });
+    box.append(card);
+  });
+}
+
+function renderBranches(){
+  const box=$("#v-branches"); box.replaceChildren();
+  const card=el("div","card"); const wrap=el("div","scroll"); const t=el("table");
+  const thead=el("thead"); const hr=el("tr"); ["الفرع","مين جاوب","الوظيفة","إمتى","أصناف",""].forEach(x=>hr.append(el("th",null,x))); thead.append(hr); t.append(thead);
+  const tb=el("tbody");
+  const fb=$("#fbranch").value; const list=fb?[fb]:BRANCHES;
+  list.forEach(b=>{
+    const rs=ROWS.filter(r=>r.branch===b);
+    if(!rs.length){ const tr=el("tr"); tr.append(el("td",null,b)); const td=el("td",null,"لسه ماجاوبش"); td.colSpan=5; td.style.color="var(--bad)"; tr.append(td); tb.append(tr); return; }
+    rs.forEach(r=>{ const tr=el("tr");
+      tr.append(el("td",null,b),el("td",null,r.respondent||"—"),el("td",null,r.role||"—"),el("td",null,fmtDate(r.created_at)),el("td","num",Object.keys(r.items||{}).length+" / "+ITEMS.length));
+      const td=el("td"); const del=el("button","btn ghost sm","مسح"); del.title="مسح الإجابة دي (لو تجربة أو مكررة)";
+      del.addEventListener("click",()=>delRow(r)); td.append(del); tr.append(td); tb.append(tr); });
+  });
+  t.append(tb); wrap.append(t); card.append(wrap); box.append(card);
+}
+
+function renderIdeas(rows){
+  const box=$("#v-ideas"); box.replaceChildren();
+  const ideas=rows.filter(r=>r.general);
+  const card=el("div","card");
+  if(!ideas.length){ card.append(el("div","empty","مفيش اقتراحات عامة لسه.")); box.append(card); return; }
+  const ul=el("ul"); ul.style.margin="0"; ul.style.paddingInlineStart="18px";
+  ideas.forEach(r=>{ const li=el("li"); li.style.marginBottom="10px"; li.append(el("div",null,r.general), el("div","note",r.branch+" · "+(r.respondent||"")+" · "+fmtDate(r.created_at))); ul.append(li); });
+  card.append(ul); box.append(card);
+}
+
+async function delRow(r){
+  if(!confirm("تمسح إجابة "+(r.respondent||"")+" من فرع "+r.branch+"؟ مش هينفع ترجعها.")) return;
+  try{ await rpc("survey_delete_response",{p_password:PW,p_id:r.id}); ROWS=ROWS.filter(x=>x.id!==r.id); render(); setR("اتمسحت.","ok"); }
+  catch(e){ setR("المسح ما نجحش: "+e.message,"bad"); }
+}
+function setR(t,k){ const m=$("#rmsg"); m.textContent=t; m.className="msg "+(k||""); }
+
+async function refresh(){
+  setR("بحدّث…");
+  try{ ROWS=await rpc("survey_results",{p_password:PW})||[]; render(); setR("اتحدّث. "+ROWS.length+" إجابة.","ok"); }
+  catch(e){ if(e.status===403){ logout(); } else setR("التحديث ما نجحش: "+e.message,"bad"); }
+}
+
+function csv(){
+  const head=["الفرع","الاسم","الوظيفة","التاريخ","الصنف","القسم","الأسباب","مش نازل عندنا","سبب تاني","الصنف البديل","ملاحظة","اقتراح عام"];
+  const q=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const lines=[head.map(q).join(",")];
+  filtered().forEach(r=>{
+    const its=r.items||{}; const keys=Object.keys(its);
+    if(!keys.length) lines.push([r.branch,r.respondent,r.role,r.created_at,"","","","","","","",r.general].map(q).join(","));
+    keys.forEach(c=>{ const a=its[c]; const it=ITEMS.find(x=>String(x.c)===String(c))||{n:c,s:""};
+      lines.push([r.branch,r.respondent,r.role,r.created_at,it.n,it.s,(a.r||[]).map(k=>RL[k]||k).join(" + "),a.no?"أيوه":"",a.other||"",a.sub||"",a.note||"",r.general].map(q).join(",")); });
+  });
+  const blob=new Blob(["﻿"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="نتائج-استبيان-الفروع.csv"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+
+async function changePw(){
+  const n=prompt("الباسورد الجديد (6 حروف أو أكتر):"); if(n==null) return;
+  if(n.length<6){ setR("الباسورد لازم يبقى 6 حروف على الأقل.","bad"); return; }
+  if(prompt("اكتبه تاني للتأكيد:")!==n){ setR("الباسوردين مش زي بعض.","bad"); return; }
+  try{ await rpc("survey_set_password",{p_new:n,p_old:PW}); PW=n; try{ sessionStorage.setItem(KEY,n); }catch(e){} setR("الباسورد اتغيّر.","ok"); }
+  catch(e){ setR("ما اتغيّرش: "+e.message,"bad"); }
+}
+function logout(){ PW=null; ROWS=[]; try{ sessionStorage.removeItem(KEY); }catch(e){} showGate(); }
+
+document.querySelector(".tabs").addEventListener("click",e=>{ const b=e.target.closest(".tab"); if(!b) return; view=b.dataset.v;
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===b?"true":"false")); render(); });
+$("#fbranch").addEventListener("change",render);
+$("#refresh").addEventListener("click",refresh);
+$("#csv").addEventListener("click",csv);
+$("#chpw").addEventListener("click",changePw);
+$("#out").addEventListener("click",logout);
+
+(async()=>{
+  let saved=null; try{ saved=sessionStorage.getItem(KEY); }catch(e){}
+  if(saved){ try{ ROWS=await rpc("survey_results",{p_password:saved})||[]; PW=saved; showResults(); return; }catch(e){ try{ sessionStorage.removeItem(KEY); }catch(_){} } }
+  showGate();
+})();
+</script>
+</body>
+</html>
